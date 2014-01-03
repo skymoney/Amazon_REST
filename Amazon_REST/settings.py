@@ -1,14 +1,15 @@
 #-*- coding:utf-8 -*-
 
 import os
+import mongo_conf
 
 SERVER_NAME = '127.0.0.1:5000'
 
-MONGO_HOST = '*'
-MONGO_PORT = 27017
-MONGO_USERNAME = '*'
-MONGO_PASSWORD = '*'
-MONGO_DBNAME = '*'
+MONGO_HOST = mongo_conf.MONGO_HOST
+MONGO_PORT = mongo_conf.MONGO_PORT
+MONGO_USERNAME = mongo_conf.MONGO_USERNAME
+MONGO_PASSWORD = mongo_conf.MONGO_DA
+MONGO_DBNAME = 'amazon_speedata'
 
 RESOURCE_METHODS = ['GET']
 

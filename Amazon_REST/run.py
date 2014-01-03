@@ -25,5 +25,5 @@ class AmazonToken(TokenAuth):
 			return None
 
 if __name__ == '__main__':
-	app = Eve(auth=AmazonToken)
+	app = Eve()
 	app.run()
