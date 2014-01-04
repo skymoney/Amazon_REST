@@ -7,9 +7,9 @@ SERVER_NAME = '127.0.0.1:5000'
 
 MONGO_HOST = mongo_conf.MONGO_HOST
 MONGO_PORT = mongo_conf.MONGO_PORT
-MONGO_USERNAME = mongo_conf.MONGO_USERNAME
-MONGO_PASSWORD = mongo_conf.MONGO_DA
-MONGO_DBNAME = 'amazon_speedata'
+MONGO_USERNAME = mongo_conf.MONGO_DATA_USER
+MONGO_PASSWORD = mongo_conf.MONGO_DATA_PWD
+MONGO_DBNAME = mongo_conf.MONGO_DATA_DB
 
 RESOURCE_METHODS = ['GET']
 
@@ -38,12 +38,45 @@ commodity = {
 		'review': {
 			'type': 'list',
 		},
+		'stats_info': {
+			'type': 'Dict',
+		},
 	},
 }
 
-DOMAIN = {
-	'commodity':commodity,
+category = {
+	'item_title': 'category',
+
+	'additional_lookup': {
+		'url': 'regex("[\w]+")',
+		'field': 'id',
+	},
+
+	'schema': {
+		'id': {
+			'type': 'String',
+			'required': True,
+			'unique': True,
+		},
+		'level': {
+			'type': 'Int',
+		},
+		'name': {
+			'type': 'String',
+		},
+		'pid': {
+			'type': 'list',
+		},
+		'product_set': {
+			'type': 'list',
+		},
+		'stats_info': {
+			'type': 'Dict'
+		},
+	}
 }
 
-ETAG = None
-LINK = None
+DOMAIN = {
+	'commodity': commodity,
+	'category': category,
+}
