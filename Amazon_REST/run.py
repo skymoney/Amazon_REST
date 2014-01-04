@@ -13,22 +13,12 @@ class AmazonToken(TokenAuth):
 	#custom token auth for access
 
 	def check_auth(self, token, allowed_roles, resource, method):
-		#token_origin = re.search(r'\?[\w]+=[\w]+&?',request.url)
-		#token = token_origin[7:len(token_origin-1)]
-		#return self.get_token_col().find_one({'token': token})
-		#return True
-		if token == 'isenju':
+		
+		if self.get_token_col().find_one({'token': token}):
 			return True
 		else:
 			return False
-		#token_info = self.get_token_col().find_one({'token': token})
-
 		#return True
-		'''
-		if token:
-			return True
-		else:
-			return False
 		'''
 	'''
 	def authenticate(self):
