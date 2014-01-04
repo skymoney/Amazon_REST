@@ -19,7 +19,7 @@ class AmazonToken(TokenAuth):
 		else:
 			return False
 		#return True
-		'''
+	
 	'''
 	def authenticate(self):
 		re_method = dir(request)
