@@ -37,3 +37,56 @@ nosetests.xml
 
 #security file
 mongo_conf.py
+
+##Java jgnore setting
+#Directories
+/build/
+/bin/
+target/
+
+#OS file
+.DS_Store
+
+*.class
+
+#package files
+*.jar
+*.war
+*.ear
+*.db
+
+
+##############
+#Windows
+#############
+
+#Widows image file cache
+Thumb.db
+
+#Folder config file
+Desktop.ini
+
+######################
+# Eclipse
+######################
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+
+#External tool builder 
+.externalToollBuilders/
+
+#locally stored "Eclipsr Launch configuration"
+*.launch
+
+#PDT-specific
+.buildpath
