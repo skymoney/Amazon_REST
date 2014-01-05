@@ -1,0 +1,7 @@
+<uwsgi>
+    <socket>127.0.0.1:5000</socket>
+    <master>true</master>
+	<plugin>python</plugin>
+	<pidfile>/var/rest/rest.pid</pidfile>
+	<file>/home/cheng/Work/git/Amazon_REST/Amazon_REST/run.wsgi</file>
+</uwsgi>
