@@ -68,10 +68,11 @@ def get_all_categories(request):
     all_category_info = db.commodity.distinct('category')    
     cate_set = []
     for cate in all_category_info:
-        cate_set.append({'name':'>'.join(cate),
+        cate_set.append({'name':'>'.join(cate)})
+        '''
                          'count': db.commodity.find({'category':
                                     {'$elemMatch':{'$all':cate}}}).count()})
-    
+        '''
     del db
     return JSONResponse(cate_set)
 
