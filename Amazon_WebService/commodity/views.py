@@ -4,6 +4,7 @@
 import re
 
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.gzip import gzip_page
 from global_util.ws_conf import JSONResponse
 
 from global_util.ws_conf import get_mongo_db
@@ -29,7 +30,7 @@ def get_single_commodity(request, asin):
     del db    
     return JSONResponse(single_data)
 
-@csrf_exempt
+@gzip_page
 def get_all_categories(request):
     import time
     '''
