@@ -9,3 +9,8 @@ MONGO_COM_DB = 'amazon_speedata'
 MONGO_COM_USER = 'speedata'
 MONGO_COM_PWD = '605605'
 MONGO_COM_COLLECTION = 'commodity'
+
+#Data conf
+FIELDS = ['ASIN', 'productInfo', 'review', 'seller', 'offer', 'stats_info']
+
+ITEM_PER_PAGE = 20

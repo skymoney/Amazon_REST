@@ -25,3 +25,10 @@ def get_commodity_col():
 		return db[conf.MONGO_COM_COLLECTION]
 	except:
 		return None
+
+def generate_query(field=[]):
+    query = dict(zip(field, 
+                     [1]*len(field)))    
+    query['_id'] = 0
+    
+    return query
