@@ -27,12 +27,11 @@ def get_single_commodity(request, asin):
     single_data = db.commodity.find_one({'ASIN': asin},
                                         query_field)    
     
-    del db    
+    del db
     return JSONResponse(single_data)
 
 @gzip_page
 def get_all_categories(request):
-    import time
     '''
     get all categories in commodity
     @return: list of categories
@@ -46,23 +45,28 @@ def get_all_categories(request):
         
         query_field = cu.generate_query(eval(request.GET.get('field', '[]')))
         category_set = re.sub(r'\$','&',request.GET.get('category_name')).split('>')
-        print request.GET.get('category_name')
-        page = int(request.GET.get('page', 1))
-        print category_set
+        
+        try:
+            page = int(request.GET.get('page', 1))
+        except:
+            page = 1
+            
+        page = page if page > 0 else 1
         all_data = db.commodity.find({'category':
                                        {'$elemMatch':
                                         {'$all':category_set}}},
-                                     query_field).sort('stats_info.review_count',-1).skip(page-1).limit(ITEMS_PER_PAGE)
+                                     query_field).sort('stats_info.review_count',-1).skip((page-1)*ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
         
         del db
-        return JSONResponse([data for data in all_data])    
+        return JSONResponse(map(lambda x:x, all_data))    
     
     '''
     get whole category info
     '''
     all_category_info = db.commodity.distinct('category')
     del db
-    return JSONResponse([{'name': '>'.join(cate)} for cate in all_category_info])
+    
+    return JSONResponse(map(lambda x:{'name': '>'.join(x)}, all_category_info))
 
 
 @csrf_exempt
@@ -81,13 +85,15 @@ def custom_query(request):
          DO NOT use that if unnecessary
     '''
     if request.GET.get('query') or request.GET.get('ret'):
-        page = int(request.GET.get('page', '1'))
-        
+        try:
+            page = int(request.GET.get('page', '1'))
+        except:
+            page = 1
         page = page if page >0 else 1
         
         db = get_mongo_db()
         all_data=db.commodity.find(request.GET.get('query', {}),
-                          request.GET.get('ret', {})).sort({'stats_info': -1}).skip(page-1).limit(ITEMS_PER_PAGE)
+                          request.GET.get('ret', {})).sort({'stats_info': -1}).skip((page-1)*ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
         
         
         return JSONResponse([data for data in all_data])
