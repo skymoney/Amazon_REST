@@ -43,7 +43,7 @@ def get_all_category():
     return json.dumps(map(lambda x: {'name': '>'.join(x)},
                       all_category), cls=ComplexEncoder)
 
-@app.route('/api/commodity/field', methods=['GET'])
+@app.route('/api/commodity/field/', methods=['GET'])
 def get_available_field():
     '''
             获取可以过滤查询的field
@@ -51,7 +51,7 @@ def get_available_field():
     return json.dumps(conf.FIELDS)
 
 
-@app.route('/api/commodity/<asin>', methods=['GET'])
+@app.route('/api/commodity/<asin>/', methods=['GET'])
 def get_commodity_info(asin):
     '''
             获取指定ASIN的商品信息
