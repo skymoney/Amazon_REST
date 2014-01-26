@@ -1,14 +1,19 @@
 #-*- coding:utf-8 -*-
 from flask import Flask, request, url_for, redirect
+from flask.ext.compress import Compress
 
 import simplejson as json
 import mongo_util
 from mongo_util import ComplexEncoder
 import conf
 
-app = Flask(__name__)
+def get_app():
+    app = Flask(__name__)
+    Compress(app)
+    return app
 
-
+app = get_app()
+ 
 @app.route('/')
 def hello_world():
     return "Amazon REST API"
@@ -16,7 +21,7 @@ def hello_world():
 
 @app.route('/api/commodity/', methods=['GET'])
 def get_all_category():
-    category_name = request.args.get('category', '').replace('$', '&')
+    category_name = request.args.get('category_name', '').replace('$', '&')
 
     if category_name:
       	query_field = mongo_util.generate_query(eval(request.args.get('field', '[]')))
