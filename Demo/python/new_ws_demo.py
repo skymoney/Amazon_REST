@@ -46,15 +46,22 @@ def get_specified_commodity():
 			'category_name': all_category_data[0]['name'],
 			'field': ['ASIN'],
 			})])).read())
-	print specified_cate_data
 	#take specified asin to get detail data
 	#get all field also can get specify-field data
-	single_commodity = json.loads(urllib.urlopen('?'.join(
-		['/'.join([REQUEST_URL, 'api/commodity', specified_cate_data[0]['ASIN']]),
-		urllib.urlencode({'field': ['ASIN', 'review']}) ])).read())
+	single_commodity_review = []
+	for i in xrange(3):
+		single_commodity_review += json.loads(urllib.urlopen('?'.join(
+		    ['/'.join([REQUEST_URL, 'api/commodity', specified_cate_data[0]['ASIN']]),
+		    urllib.urlencode({'field': ['ASIN', 'review']}) ])).read())['review']
 	#print single_commodity
 	#print length of review
-	print len(single_commodity['review'])
+	print len(single_commodity_review)
+	
+	for review in single_commodity_review:
+		pass
+	
+def review_info():
+	all_category = 'api/commodity'
 	
 
 if __name__ == '__main__':
