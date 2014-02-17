@@ -22,15 +22,14 @@ def get_product_data():
 
 def review_hist():
     '''根据评论绘制出评论打分的直方图'''    
-    product_data = et_product_data()
+    product_data = get_product_data()
     
     star_list = [float(single_review['star'].split()[0]) \
                  for single_review in product_data['review']]
     
-    review_hist = plt.hist(star_list, color='grey', align='mid', bins = 5, rwidth=0.5)
+    plt.hist(star_list, color='grey', align='mid', bins = 5, rwidth=0.5)
     
-    #plt.show()
-    return review_hist
+    plt.show()
 
 
 def price_line():
@@ -45,6 +44,7 @@ def price_line():
         date_list.append(datetime.strptime(offer['info'][0]['timestamp'], 
                                            '%Y-%m-%d %H:%M:%S'))
     
+    
     plt.plot(date_list, price_list, 'o--')
     plt.gcf().autofmt_xdate()
     plt.xlabel('时间')
@@ -52,11 +52,41 @@ def price_line():
     
     plt.show()
 
+def incre_list(origin_list):
+    '''数组元素递加'''
+    return [sum(origin_list[0: idx]) for idx,ele in enumerate(origin_list)]
+
 def review_time():
     '''根据评论绘制时间增量图'''
     product_data = get_product_data()
     
+    time_list = []
+    
+    for review in product_data['review']:
+        time_list.append(datetime.strptime(review['publishTime'],
+                                           '%Y-%m-%d %H:%M:%S'))
+    time_list = list(set(time_list))    
+    review_count_dict = {}
+    
+    for single_date in time_list[::-1]:
+        review_count_dict[int(single_date.strftime('%Y%m'))] = review_count_dict[int(single_date.strftime('%Y%m'))] + 1 \
+            if review_count_dict.has_key(int(single_date.strftime('%Y%m'))) else 1
+    
+    review_count_list = sorted(review_count_dict.iteritems(), key=lambda x:x[0])
+    
+    count_data = incre_list(map(lambda x:x[1], review_count_list))
+    date_data = map(lambda x:datetime.strptime(str(x[0]), '%Y%m'), review_count_list)
+    
+    plt.plot(date_data, count_data, 'ro-')
+    plt.gcf().autofmt_xdate()
+    plt.xlabel('Time')
+    plt.ylabel('Review Count')
+    plt.ylim([0,max(count_data)])
+    
+    plt.show()
 
 if __name__ == '__main__':
-    #plt.show()
-    price_line()
+    #review_hist()
+    #price_line()
+    #review_time()
+    pass
