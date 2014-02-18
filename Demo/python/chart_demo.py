@@ -12,11 +12,13 @@ import simplejson as json
 from datetime import datetime
 import matplotlib.pyplot as plt
 
-###
+#######################################################
 #根据 http://112.124.1.3:8004/api/commodity/B00547HWBE/
 # 的信息来进行Demo演示
+#######################################################
 
 def get_product_data():
+    '''获取Demo的商品信息'''
     target_url = 'http://112.124.1.3:8004/api/commodity/B00547HWBE/'
     return json.loads(urllib.urlopen(target_url).read())
 
@@ -27,7 +29,7 @@ def review_hist():
     star_list = [float(single_review['star'].split()[0]) \
                  for single_review in product_data['review']]
     
-    plt.hist(star_list, color='grey', align='mid', bins = 5, rwidth=0.5)
+    plt.hist(star_list, color ='grey', align = 'mid', bins = 5, rwidth = 0.5)
     
     plt.show()
 
@@ -39,6 +41,7 @@ def price_line():
     price_list=[]
     date_list=[]
     
+    #这里只是取每个阶段的第一个价格，实际上可以绘制所有价格的曲线
     for offer in product_data['offer']:
         price_list.append(offer['info'][0]['price'])
         date_list.append(datetime.strptime(offer['info'][0]['timestamp'], 
@@ -46,8 +49,8 @@ def price_line():
     
     
     plt.plot(date_list, price_list, 'o--')
-    plt.gcf().autofmt_xdate()
-    plt.xlabel('时间')
+    plt.gcf().autofmt_xdate()   #自动调整日期显示的格式
+    plt.xlabel('日期')
     plt.ylabel('价格')
     
     plt.show()
@@ -86,7 +89,7 @@ def review_time():
     plt.show()
 
 if __name__ == '__main__':
-    #review_hist()
-    #price_line()
-    #review_time()
+    #review_hist()    #取消注释演示评论直方图的绘制
+    #price_line()     #取消注释演示价格时间折线图的绘制
+    #review_time()    #取消注释演示评论时间折线图的绘制
     pass
