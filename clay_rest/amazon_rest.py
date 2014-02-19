@@ -82,7 +82,10 @@ def custom_query():
         query = eval(request.args.get('query', '{}'))
         ret = eval(request.args.get('ret', '{}'))
         
-        all_query_cursor = com_col.find(query,ret).batch_size(1000)
+        #not return _id for serilization
+        ret['_id'] = 0
+        all_query_cursor = com_col.find(query,ret).batch_size(1000)        
+        
         return json.dumps(map(lambda x:x, all_query_cursor), 
                           cls=ComplexEncoder)
     else:
