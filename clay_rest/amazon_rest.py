@@ -79,8 +79,8 @@ def custom_query():
         com_col = mongo_util.get_commodity_col()
         
         #skip = int(request.args.get('skip', '0'))
-        query = request.args.get('query', {})
-        ret = request.args.get('ret', {})
+        query = eval(request.args.get('query', '{}'))
+        ret = eval(request.args.get('ret', '{}'))
         
         all_query_cursor = com_col.find(query,ret).batch_size(1000)
         return json.dumps(map(lambda x:x, all_query_cursor), 
