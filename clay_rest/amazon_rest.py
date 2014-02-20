@@ -56,6 +56,23 @@ def get_available_field():
     return json.dumps(conf.FIELDS)
 
 
+@app.route('/api/commodity/count/', methods=['GET'])
+def get_category_count():
+    '''获取某一个分类下的所有商品数目'''
+    if request.args.get('category_name', ''):
+        category = request.args.get('category_name', '').replace('$', '&')
+        
+        com_col = mongo_util.get_commodity_col()
+        
+        category_count = com_col.find({'category': 
+                                       {'$elemMatch': {'$all': 
+                                                       category.split('>')}}}).count()
+        return json.dumps({'category': category,
+                           'count': category_count})
+    else:
+        return json.dumps({'error': 'not valid'})
+        
+
 @app.route('/api/commodity/<asin>/', methods=['GET'])
 def get_commodity_info(asin):
     '''
@@ -67,7 +84,7 @@ def get_commodity_info(asin):
 
     asin_info = com_col.find_one({'ASIN': asin},
                                  query_field)
-
+    del com_col
     return json.dumps(asin_info, cls=ComplexEncoder)
 
 @app.route('/api/custom/', methods=['GET'])
