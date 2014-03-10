@@ -1,11 +1,13 @@
 #-*- coding:utf-8 -*-
 from flask import Flask, request, url_for, redirect
 from flask.ext.compress import Compress
+from flask.ext.httpauth import HTTPBasicAuth
 
 import simplejson as json
 import mongo_util
 from mongo_util import ComplexEncoder
 import conf
+import auth_util
 
 def get_app():
     app = Flask(__name__)
@@ -13,7 +15,14 @@ def get_app():
     return app
 
 app = get_app()
- 
+
+auth = HTTPBasicAuth()
+
+@auth.get_password
+def get_pw(username):
+    return auth_util.check_auth(username)
+
+
 @app.route('/')
 def hello_world():
     return "Amazon REST API"
@@ -94,21 +103,23 @@ def custom_query():
     '''
     if request.args.get('query', '') or request.args.get('ret', ''):
         com_col = mongo_util.get_commodity_col()
-        
         #skip = int(request.args.get('skip', '0'))
         query = eval(request.args.get('query', '{}'))
         ret = eval(request.args.get('ret', '{}'))
         
         #not return _id for serilization
         ret['_id'] = 0
-        all_query_cursor = com_col.find(query,ret).batch_size(1000)        
+        all_query_cursor = com_col.find(query,ret).batch_size(1000)
         
         return json.dumps(map(lambda x:x, all_query_cursor), 
                           cls=ComplexEncoder)
     else:
         return redirect('/api/commodity/', code=302)
 
+@app.route('/api/commodity/custom/', methods=['GET'])
+def commodity_custom():
+    return redirect(url_for('custom_query', **request.args))
 
 if __name__ == '__main__':
-    app.debug = False
+    app.debug = True
     app.run(host='0.0.0.0', port=5000)
