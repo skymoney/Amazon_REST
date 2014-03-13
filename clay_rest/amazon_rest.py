@@ -52,7 +52,7 @@ def get_all_category():
 
     com_col = mongo_util.get_commodity_col()
 
-    all_category = com_col.distinct('category')
+    all_category = com_col.distinct('category.0')
 
     return json.dumps(map(lambda x: {'name': '>'.join(x)},
                       all_category), cls=ComplexEncoder)
