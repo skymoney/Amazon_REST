@@ -89,7 +89,7 @@ def review_time():
     plt.show()
 
 if __name__ == '__main__':
-    #review_hist()    #取消注释演示评论直方图的绘制
+    review_hist()    #取消注释演示评论直方图的绘制
     #price_line()     #取消注释演示价格时间折线图的绘制
     #review_time()    #取消注释演示评论时间折线图的绘制
     pass

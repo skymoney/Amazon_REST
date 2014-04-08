@@ -26,6 +26,16 @@ def get_commodity_col():
 	except:
 		return None
 
+def get_auth_col():
+	'''get auth data collection'''
+	con = pymongo.Connection(conf.MONGO_HOST, conf.MONGO_PORT)
+	db = con[conf.MONGO_AUTH_DB]
+	try:
+		db.authenticate(conf.MONGO_AUTH_USER, conf.MONGO_AUTH_PWD)
+		return db[conf.MONGO_AUTH_COLLECTION]
+	except:
+		return None
+
 def generate_query(field=[]):
     query = dict(zip(field, 
                      [1]*len(field)))    

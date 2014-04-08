@@ -10,6 +10,12 @@ MONGO_COM_USER = 'speedata'
 MONGO_COM_PWD = '605605'
 MONGO_COM_COLLECTION = 'commodity'
 
+#MONGO Auth conf
+MONGO_AUTH_DB = 'e_bus_account'
+MONGO_AUTH_USER = 'root'
+MONGO_AUTH_PWD = '605605'
+MONGO_AUTH_COLLECTION = 'ws_token'
+
 #Data conf
 FIELDS = ['ASIN', 'productInfo', 'review', 'seller', 'offer', 'stats_info']
 
