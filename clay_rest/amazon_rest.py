@@ -1,5 +1,5 @@
 #-*- coding:utf-8 -*-
-from flask import Flask, request, url_for, redirect
+from flask import Flask, request, url_for, redirect, jsonify
 from flask.ext.compress import Compress
 from flask.ext.httpauth import HTTPBasicAuth
 
@@ -120,6 +120,15 @@ def custom_query():
 def commodity_custom():
     return redirect(url_for('custom_query', **request.args))
 
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return jsonify({})
+
+@app.errorhandler(500)
+def server_error(error):
+    return jsonify({})
+
 if __name__ == '__main__':
-    app.debug = True
+    app.debug = False
     app.run(host='0.0.0.0', port=5000)
