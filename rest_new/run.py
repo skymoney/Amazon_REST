@@ -12,6 +12,7 @@ app = Flask(__name__)
 
 def get_app():
 	app = Flask(__name__)
+	app.config.from_object('settings')
 	return app
 
 app = get_app()
@@ -139,5 +140,4 @@ def bad_request(error):
 
 #main entrance
 if __name__ == '__main__':
-	app.debug = True
 	app.run(host='0.0.0.0',port=5000)
