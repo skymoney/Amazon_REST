@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 
 #setting for flask app
-DEBUG = True
+DEBUG = False
 
 HOST = '0.0.0.0'
 PORT = 6000
