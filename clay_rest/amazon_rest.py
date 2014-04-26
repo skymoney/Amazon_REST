@@ -104,8 +104,8 @@ def custom_query():
     if request.args.get('query', '') or request.args.get('ret', ''):
         com_col = mongo_util.get_commodity_col()
         #skip = int(request.args.get('skip', '0'))
-        query = eval(request.args.get('query', '{}'))
-        ret = eval(request.args.get('ret', '{}'))
+        query = eval(request.args.get('query', '{}').replace('$', '&'))
+        ret = eval(request.args.get('ret', '{}').replace('$', '&'))
         
         #not return _id for serilization
         ret['_id'] = 0
