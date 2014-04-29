@@ -62,8 +62,8 @@ def get_available_field():
     '''
             获取可以过滤查询的field
     '''
-    #return json.dumps(conf.FIELDS)
-    return Resonse(jsonify(conf.FIELDS), mimetype='application/json')
+    return jsonify(results = conf.FIELDS)
+    #return Resonse(jsonify(conf.FIELDS), mimetype='application/json')
 
 
 @app.route('/api/commodity/count/', methods=['GET'])
@@ -95,7 +95,8 @@ def get_commodity_info(asin):
     asin_info = com_col.find_one({'ASIN': asin},
                                  query_field)
     del com_col
-    return jsonify(asin_info)
+    return Response(json.dumps(asin_info, cls=ComplexEncoder), 
+                    mimetype='application/json')
 
 @app.route('/api/custom/', methods=['GET'])
 def custom_query():
