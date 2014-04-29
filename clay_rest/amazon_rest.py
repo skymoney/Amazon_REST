@@ -1,5 +1,5 @@
 #-*- coding:utf-8 -*-
-from flask import Flask, request, url_for, redirect, jsonify
+from flask import Flask, request, url_for, redirect, jsonify, Response
 from flask.ext.compress import Compress
 from flask.ext.httpauth import HTTPBasicAuth
 
@@ -48,21 +48,22 @@ def get_all_category():
             {'category': {'$elemMatch': {'$all': category_name.split('>')}}},
             query_field).skip((page - 1) * conf.ITEM_PER_PAGE).limit(conf.ITEM_PER_PAGE).batch_size(500)
 
-        return json.dumps(map(lambda x:x, com_cursor), cls=ComplexEncoder)
+        return Response(json.dumps(map(lambda x:x, com_cursor), cls=ComplexEncoder), mimetype='application/json')
 
     com_col = mongo_util.get_commodity_col()
 
     all_category = com_col.distinct('category.0')
 
-    return json.dumps(map(lambda x: {'name': '>'.join(x)},
-                      all_category), cls=ComplexEncoder)
+    return Response(json.dumps(map(lambda x: {'name': '>'.join(x)},
+                      all_category), cls=ComplexEncoder), mimetype='application/json')
 
 @app.route('/api/commodity/field/', methods=['GET'])
 def get_available_field():
     '''
             获取可以过滤查询的field
     '''
-    return json.dumps(conf.FIELDS)
+    #return json.dumps(conf.FIELDS)
+    return Resonse(jsonify(conf.FIELDS), mimetype='application/json')
 
 
 @app.route('/api/commodity/count/', methods=['GET'])
@@ -76,10 +77,10 @@ def get_category_count():
         category_count = com_col.find({'category': 
                                        {'$elemMatch': {'$all': 
                                                        category.split('>')}}}).count()
-        return json.dumps({'category': category,
+        return jsonify({'category': category,
                            'count': category_count})
     else:
-        return json.dumps({'error': 'not valid'})
+        return jsonify({'error': 'not valid'})
         
 
 @app.route('/api/commodity/<asin>/', methods=['GET'])
@@ -94,7 +95,7 @@ def get_commodity_info(asin):
     asin_info = com_col.find_one({'ASIN': asin},
                                  query_field)
     del com_col
-    return json.dumps(asin_info, cls=ComplexEncoder)
+    return jsonify(asin_info)
 
 @app.route('/api/custom/', methods=['GET'])
 def custom_query():
@@ -106,13 +107,12 @@ def custom_query():
         #skip = int(request.args.get('skip', '0'))
         query = eval(request.args.get('query', '{}').replace('$', '&'))
         ret = eval(request.args.get('ret', '{}').replace('$', '&'))
-        
         #not return _id for serilization
         ret['_id'] = 0
-        all_query_cursor = com_col.find(query,ret).batch_size(1000)
+        all_query_cursor = com_col.find(query,ret).batch_size(5000)
         
-        return json.dumps(map(lambda x:x, all_query_cursor), 
-                          cls=ComplexEncoder)
+        return Response(json.dumps(map(lambda x:x, all_query_cursor), 
+                          cls=ComplexEncoder), mimetype='application/json')
     else:
         return redirect('/api/commodity/', code=302)
 
@@ -123,11 +123,11 @@ def commodity_custom():
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return jsonify({})
+    return jsonify({'status': 'error', 'data': 'page not found'})
 
 @app.errorhandler(500)
 def server_error(error):
-    return jsonify({})
+    return jsonify({'status': 'error', 'data': 'server error'})
 
 if __name__ == '__main__':
     app.debug = False
