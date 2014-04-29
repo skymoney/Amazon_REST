@@ -73,10 +73,51 @@
 
 4, /category/<category>
     接口列表： 返回给定分类下的商品信息
-    接口信息
+    接口信息：
+        URL： http://112.124.1.3:8020/category/Beauty%3EFragrance%3ESets
+        支持格式： JSON
+        HTTP请求方式： GET
+        DEMO：http://112.124.1.3:8020/category/Beauty%3EFragrance%3ESets?page=2&fields=[%27productInfo%27]
+    传递参数：
+        名称      类型      是否必须    说明
+       page      INT        否       获取某一页的数据
+       fields    list       否       指定返回的字段
+    返回字段：
+        字段      类型     说明
+       data       dict   返回的数据
+       status    String   返回状态说明
+    Demo：
 
 5, /fields/
+    接口列表：返回可以使用的field字段
+    接口信息：
+        URL：http://112.124.1.3:8020/fields/
+        支持格式：JSON
+        HTTP请求方式：GET
+        DEMO：http://112.124.1.3:8020/fields/
+    传递参数：
+        无
+    返回字段：
+        字段      类型     说明
+       data      list    返回的数据
+       status    String  返回状态说明
+    Demo：
+       
 
 6, /commodity/<asin>
+    接口列表：返回具体商品信息
+    接口信息：
+        URL：http://112.124.1.3:8020/commodity/B00547HWBE/
+        支持格式： JSON
+        HTTP请求方式： GET
+        Demo: http://112.124.1.3:8020/commodity/B00547HWBE/
+    传递参数：
+        无
+    返回字段：
+        字段     类型     说明
+        data     dict     返回的数据
+        status   String   返回状态说明
+    Demo
 
 7, /custom/
+    接口列表： 自定义数据查询

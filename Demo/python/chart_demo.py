@@ -68,7 +68,7 @@ def review_time():
     for review in product_data['review']:
         time_list.append(datetime.strptime(review['publishTime'],
                                            '%Y-%m-%d %H:%M:%S'))
-    time_list = list(set(time_list))    
+    #time_list = list(set(time_list))    
     review_count_dict = {}
     
     for single_date in time_list[::-1]:
