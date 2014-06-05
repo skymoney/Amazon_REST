@@ -53,9 +53,9 @@ def get_all_category():
     com_col = mongo_util.get_commodity_col()
 
     all_category = com_col.distinct('category.0')
-
     return Response(json.dumps(map(lambda x: {'name': '>'.join(x)},
-                      all_category), cls=ComplexEncoder), mimetype='application/json')
+                      filter(lambda x: x if x else [],all_category)), cls=ComplexEncoder), mimetype='application/json')
+    
 
 @app.route('/api/commodity/field/', methods=['GET'])
 def get_available_field():
@@ -130,5 +130,5 @@ def server_error(error):
     return jsonify({'status': 'error', 'data': 'server error'})
 
 if __name__ == '__main__':
-    app.debug = False
+    app.debug = True
     app.run(host='0.0.0.0', port=5000)
