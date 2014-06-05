@@ -45,8 +45,8 @@ def get_all_category():
         com_col = mongo_util.get_commodity_col()
         
         com_cursor = com_col.find(
-            {'category': {'$elemMatch': {'$all': category_name.split('>')}}},
-            query_field).skip((page - 1) * conf.ITEM_PER_PAGE).limit(conf.ITEM_PER_PAGE).batch_size(500)
+            {'category.0': category_name.split('>')},
+            query_field).skip((page - 1) * conf.ITEM_PER_PAGE).limit(conf.ITEM_PER_PAGE).batch_size(5000)
 
         return Response(json.dumps(map(lambda x:x, com_cursor), cls=ComplexEncoder), mimetype='application/json')
 
@@ -73,9 +73,8 @@ def get_category_count():
         
         com_col = mongo_util.get_commodity_col()
         
-        category_count = com_col.find({'category': 
-                                       {'$elemMatch': {'$all': 
-                                                       category.split('>')}}}).count()
+        category_count = com_col.find({'category.0': category.split('>')}).count()
+        del com_col
         return jsonify({'category': category,
                            'count': category_count})
     else:
