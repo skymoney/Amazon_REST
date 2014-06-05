@@ -62,7 +62,7 @@ def get_available_field():
     '''
             获取可以过滤查询的field
     '''
-    return Resonse(jsonify(conf.FIELDS), mimetype='application/json')
+    return Response(jsonify({'fields':conf.FIELDS}), mimetype='application/json')
 
 
 @app.route('/api/commodity/count/', methods=['GET'])
