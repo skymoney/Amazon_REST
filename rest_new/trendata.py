@@ -34,7 +34,7 @@ def all_categories():
 	db = mongo_util.get_mongo_db()
 
 	all_cate = db[conf.MONGO_COL].distinct('category.0')
-	all_cate_info = map(lambda x:{'name': '>'.join(x)}, all_cate)
+	all_cate_info = map(lambda x:{'name': '>'.join(x)}, filter(lambda x: x if x else [], all_cate))
 
 	return jsonify({'status': 'ok', 'data': all_cate_info})
 
@@ -140,4 +140,5 @@ def bad_request(error):
 
 #main entrance
 if __name__ == '__main__':
+	app.debug = True
 	app.run(host='0.0.0.0',port=8019)
