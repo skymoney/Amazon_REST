@@ -155,7 +155,7 @@ ROOT_DIR = '/mnt/mongo/ImageData/'
 
 ACCESS_DIR = 'http://112.124.1.3/ImageData/'
 
-
+@app.route('/img/asin/<asin>', methods=['GET'])
 def dispatch_by_asin(asin):
 	#url http://xxxx?type=stats&time=?
 	db = mongo_conf.get_mongo_db()
