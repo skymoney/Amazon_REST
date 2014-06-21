@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
 
-import re
+import re, os
 
 from flask import Flask, jsonify, make_response, request
 from flask.ext.httpauth import HTTPBasicAuth
@@ -158,7 +158,7 @@ ACCESS_DIR = 'http://112.124.1.3/ImageData/'
 @app.route('/img/asin/<asin>', methods=['GET'])
 def dispatch_by_asin(asin):
 	#url http://xxxx?type=stats&time=?
-	db = mongo_conf.get_mongo_db()
+	db = mongo_util.get_mongo_db()
 
 	target_data = db['commodity'].find_one({'ASIN': asin}, {'category': 1, 'productInfo.img': 1})
 
@@ -219,5 +219,5 @@ def bad_request(error):
 
 #main entrance
 if __name__ == '__main__':
-	app.debug = False
-	app.run(host='0.0.0.0',port=8019)
+	app.debug = True
+	app.run(host='0.0.0.0',port=8021)
