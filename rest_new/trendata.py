@@ -72,6 +72,37 @@ def category_commodity_info(category):
 			'page': page, 
 			'data': map(lambda x: x, current_data_cursor)})
 
+@app.route('/mobilefield/<field>', methods=['GET'])
+def multi_category_fetch(field):
+	#get category by field
+	#field means some categories combined
+	target_category_set = conf.CATEGORY_DICT.get(field, ['Pet Supplies>Dogs'])
+	#category_set = map(lambda x: x.split('>'), target_category_set)
+	db = mongo_util.get_mongo_db()
+	
+	#all_data = db['commodity'].find({'category.0': {'$in': category_set}}).sort('', -1)
+	
+	top_number = int(request.args.get('topn', 5))
+	
+	page = int(request.args.get('page', '0'))
+	
+	all_fields = eval(request.args.get('fields', "['ASIN', 'productInfo.name', 'productInfo.img']"))
+	query_fields = dict(zip(all_fields + ['_id'], 
+		[1 for i in xrange(len(all_fields))] + [0]))
+	
+	final_data = []
+	#print target_category_set
+	for category in target_category_set:
+		current_data = db['commodity'].find({'category':{'$elemMatch': 
+				{'$all': category.split('>')}}}, query_fields).sort('stats_info.review_count', 
+				-1).skip(page*top_number).limit(top_number).batch_size(3000)
+		final_data += map(lambda x: x, current_data)
+	
+	top_n_commodity = sorted(final_data)[:top_number]
+	
+	return jsonify({'status': 'ok', 
+				'data': top_n_commodity})
+	
 @app.route('/fields/', methods=['GET'])
 def field_available():
 	'''get all available fields'''
@@ -140,5 +171,5 @@ def bad_request(error):
 
 #main entrance
 if __name__ == '__main__':
-	app.debug = False
+	app.debug = True
 	app.run(host='0.0.0.0',port=8019)
