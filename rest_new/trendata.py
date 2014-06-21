@@ -1,5 +1,7 @@
 #-*- coding:utf-8 -*-
 
+import re
+
 from flask import Flask, jsonify, make_response, request
 from flask.ext.httpauth import HTTPBasicAuth
 
@@ -147,6 +149,52 @@ def custom_query():
 			
 	return jsonify({'status': 'error', 
 		'data': 'not valid custom query'})
+
+#########img dispatcher###################
+ROOT_DIR = '/mnt/mongo/ImageData/'
+
+ACCESS_DIR = 'http://112.124.1.3/ImageData/'
+
+
+def dispatch_by_asin(asin):
+	#url http://xxxx?type=stats&time=?
+	db = mongo_conf.get_mongo_db()
+
+	target_data = db['commodity'].find_one({'ASIN': asin}, {'category': 1, 'productInfo.img': 1})
+
+	if target_data and target_data['category']:
+		category = target_data['category'][0]
+
+		img_dir = ROOT_DIR + '/'.join(category) + '/' + asin
+
+		all_target_files = os.listdir(img_dir)
+		
+		#filter and get newest img of all types
+		all_types = list(set(map(lambda x: x.split('-')[0], all_target_files)))
+		
+		if request.args.get('filter', '') != 'all':
+			filter_img_files = map(lambda type: sorted(filter(lambda x: re.search(r'^'+ type +'.*', x), all_target_files))[-1], all_types)
+		else:
+			filter_img_files = all_target_files
+			
+		all_access_imgs = map(lambda x: 
+			{'path': ACCESS_DIR + '/'.join(category) + '/' + asin + '/' + x}, 
+			filter_img_files)
+		
+		asin_url = ''
+		
+		if re.search(r'^http:.*', target_data['productInfo'][0]['img']):
+			#use amazon url
+			asin_url = target_data['productInfo'][0]['img']
+		elif re.search(r'^/mnt/.*', target_data['productInfo'][0]['img']):
+			#/mnt/
+			asin_url = ACCESS_DIR + '/'.join(target_data['productInfo'][0]['img'].split('/')[2:])
+		else:
+			pass
+			
+		return jsonify({'status': 'ok', 'data': {'img': asin_url, 'charts': all_access_imgs}})
+	
+	return jsonify({'status': 'error', 'data': 'target data not exists'})
 
 #########error handler####################
 @app.errorhandler(404)
