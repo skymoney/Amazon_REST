@@ -5,10 +5,9 @@ import re, os
 from flask import Flask, jsonify, make_response, request
 from flask.ext.httpauth import HTTPBasicAuth
 
-
 from datetime import datetime
 
-import mongo_util, conf
+import mongo_util, conf, brand_seller_api
 
 app = Flask(__name__)
 
@@ -125,6 +124,30 @@ def single_commodity(asin):
 
 	return jsonify({'status': 'ok', 'data': commodity_info})
 
+#############seller and brand#########################
+
+@app.route('/mobilefield/brand/<field>', methods=['GET'])
+def brand_mobile_field(field):
+	return jsonify({'status': 'ok', 
+				'data': map(lambda x: {'name': x[0], 'brand_info': x[1]}, 
+						    sorted(brand_seller_api.brand_mobile_field(field).items(), \
+							key=lambda x: x[1]['review_count'], 
+							reverse=True)[:request.args.get('limit', 5)]) })
+
+def brand_summary(category):
+	#get brand summary info given category
+	db = mongo_util.get_mongo_db()
+	
+	#get all products
+	all_data_cur = db['commodity'].find({'category.0': category.split('>')}, 
+									{}).batch_size(2000)
+	
+	for data in all_data_cur:
+		pass
+
+
+#############custom query##########################
+
 @app.route('/custom/', methods=['GET'])
 def custom_query():
 	'''custom query for data'''
@@ -219,5 +242,5 @@ def bad_request(error):
 
 #main entrance
 if __name__ == '__main__':
-	app.debug = True
+	app.debug = False
 	app.run(host='0.0.0.0',port=8019)
