@@ -134,16 +134,10 @@ def brand_mobile_field(field):
 							key=lambda x: x[1]['review_count'], 
 							reverse=True)[:int(request.args.get('limit', 5))]) })
 
-def brand_summary(category):
-	#get brand summary info given category
-	db = mongo_util.get_mongo_db()
-	
-	#get all products
-	all_data_cur = db['commodity'].find({'category.0': category.split('>')}, 
-									{}).batch_size(2000)
-	
-	for data in all_data_cur:
-		pass
+@app.route('/mobilefield/brand/info/<brand_name>', methods=['GET'])
+def brand_info(brand_name):
+	return jsonify({'status': 'ok', 
+				'data': brand_seller_api.brand_info(brand_name) })
 
 
 #############custom query##########################

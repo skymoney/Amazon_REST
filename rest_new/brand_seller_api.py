@@ -35,4 +35,11 @@ def brand_mobile_field(field, **kwargs):
                 
     
     return brand_set
+
+def brand_info(brand_name):
+    db = mongo_util.get_mongo_db()
+    
+    brand_info = map(lambda x: x, db['brand'].find({'name': brand_name}))
+    
+    return brand_info[0] if brand_info else {}
         
