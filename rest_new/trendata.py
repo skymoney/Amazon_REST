@@ -132,7 +132,7 @@ def brand_mobile_field(field):
 				'data': map(lambda x: {'name': x[0], 'brand_info': x[1]}, 
 						    sorted(brand_seller_api.brand_mobile_field(field).items(), \
 							key=lambda x: x[1]['review_count'], 
-							reverse=True)[:request.args.get('limit', 5)]) })
+							reverse=True)[:int(request.args.get('limit', 5))]) })
 
 def brand_summary(category):
 	#get brand summary info given category
