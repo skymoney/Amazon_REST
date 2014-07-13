@@ -85,7 +85,7 @@ def seller_mobile_field(field, **kwargs):
 
 def seller_info(seller_name):
     db = mongo_util.get_mongo_db()
-    seller_info = map(lambda x:x ,db['brand'].find({'name': seller_name}, {'_id': 0}))
+    seller_info = map(lambda x:x ,db['seller'].find({'name': seller_name}, {'_id': 0}))
     
     return seller_info[0] if seller_info else {}
     
