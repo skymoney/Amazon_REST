@@ -132,13 +132,24 @@ def brand_mobile_field(field):
 				'data': map(lambda x: {'name': x[0], 'brand_info': x[1]}, 
 						    sorted(brand_seller_api.brand_mobile_field(field).items(), \
 							key=lambda x: x[1]['review_count'], 
-							reverse=True)[:int(request.args.get('limit', 5))]) })
+							reverse=True)[:int(request.args.get('topn', 5))]) })
 
 @app.route('/mobilefield/brand/info/<brand_name>', methods=['GET'])
 def brand_info(brand_name):
 	return jsonify({'status': 'ok', 
 				'data': brand_seller_api.brand_info(brand_name) })
 
+@app.route('/mobilefield/seller/<field>', methods=['GET'])
+def seller_mobile_field(field):
+	return jsonify({'data': 'ok', 
+				'data': sorted(brand_seller_api.seller_mobile_field(field), 
+							key=lambda x: x['count'], reverse=True)[0: \
+								int(request.args.get('topn', '5'))]})
+
+@app.route('/mobilefield/seller/info/<seller_name>', methods=['GET'])
+def seller_info(seller_name):
+	return jsonify({'data': 'ok', 
+				'data': brand_seller_api.seller_info(seller_name)})
 
 #############custom query##########################
 

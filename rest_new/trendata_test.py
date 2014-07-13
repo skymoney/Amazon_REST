@@ -15,6 +15,12 @@ for data in final_data:
     print data
 '''
 
-brand_info = brand_seller_api.brand_info('lilu')
+#brand_info = brand_seller_api.brand_info('lilu')
 
-print brand_info
+#print brand_info
+seller_info = brand_seller_api.seller_mobile_field('wig')
+
+hot_seller = sorted(seller_info, key=lambda x:x['count'], reverse=True)[:10]
+
+for s in hot_seller:
+    print s
