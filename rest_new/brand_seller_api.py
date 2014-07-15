@@ -34,8 +34,13 @@ def brand_mobile_field(field, **kwargs):
                 pass
                 #brand_set[data['productInfo'][0]['brand']['name']]['high_price'] = ''
                 
-    
-    return brand_set
+    return map(lambda x: {'name': x[0], 'brand_info': {'count': x[1]['count'], 
+                                                       'review_count': x[1]['review_count'],
+                                                       'keyowords': ['good', 'great', 'bad']}}, 
+                            sorted(brand_set.items(), \
+                            key=lambda x: x[1]['review_count'], 
+                            reverse=True)[:5])
+
 
 def brand_info(brand_name):
     db = mongo_util.get_mongo_db()
@@ -83,7 +88,7 @@ def seller_mobile_field(field, **kwargs):
                   map(lambda x: {'name': x[1].get('name', ''), 
                                  'seller_info': {
                                                  'count': x[1]['count'], 
-                                                 'seller_keywords': ['great', 'good', 'bad']}}, 
+                                                 'keywords': ['great', 'good', 'bad']}}, 
                       seller_set.items()))
 
 def seller_info(seller_name):
