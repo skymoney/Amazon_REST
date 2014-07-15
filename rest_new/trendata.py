@@ -129,7 +129,7 @@ def single_commodity(asin):
 @app.route('/mobilefield/brand/<field>', methods=['GET'])
 def brand_mobile_field(field):
 	return jsonify({'status': 'ok', 
-				'data': map(lambda x: {'name': x[0], 'brand_info': x[1]}, 
+				'data': map(lambda x: {'name': x[0], 'brand_info': x[1], 'brand_keywords': ['test']}, 
 						    sorted(brand_seller_api.brand_mobile_field(field).items(), \
 							key=lambda x: x[1]['review_count'], 
 							reverse=True)[:int(request.args.get('topn', 5))]) })

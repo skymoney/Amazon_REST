@@ -81,7 +81,10 @@ def seller_mobile_field(field, **kwargs):
                         pass
     return filter(lambda x: x['name'] != 'Amazon' and x['name'] is not None, 
                   map(lambda x: {'name': x[1].get('name', ''), 
-                        'count': x[1]['count']}, seller_set.items()))
+                                 'seller_info': {
+                                                 'count': x[1]['count'], 
+                                                 'seller_keywords': ['great', 'good', 'bad']}}, 
+                      seller_set.items()))
 
 def seller_info(seller_name):
     db = mongo_util.get_mongo_db()
