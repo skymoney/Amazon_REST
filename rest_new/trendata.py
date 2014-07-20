@@ -163,7 +163,7 @@ def custom_query():
 
 			page = int(request.args.get('page', '1'))
 
-			custom_cursor = db[conf.MONGO_COL].find(query, ret).skip((page)\
+			custom_cursor = db[conf.MONGO_COL].find(query, ret).skip((page-1)\
 			 * conf.ITEM_PERPAGE).limit(conf.ITEM_PERPAGE).batch_size(2000)
 
 			return jsonify({'status': 'ok', 
