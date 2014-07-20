@@ -10,6 +10,7 @@ def brand_mobile_field(field, **kwargs):
     limit = kwargs.get('limit', 10)
     final_data = []
     brand_set = {}
+    
     for category in target_category_set:
         cur_data = db.commodity.find({'category.0': category.split('>')}, 
                                      {'productInfo': 1, 
@@ -36,7 +37,7 @@ def brand_mobile_field(field, **kwargs):
                 
     return map(lambda x: {'name': x[0], 'brand_info': {'count': x[1]['count'], 
                                                        'review_count': x[1]['review_count'],
-                                                       'keyowords': ['good', 'great', 'bad']}}, 
+                                                       'keywords': ['good', 'great', 'bad']}}, 
                             sorted(brand_set.items(), \
                             key=lambda x: x[1]['review_count'], 
                             reverse=True)[:5])
