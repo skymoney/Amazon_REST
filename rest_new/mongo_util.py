@@ -14,3 +14,13 @@ def get_mongo_db():
 		return db
 	except:
 		return None
+
+def get_auth_db():
+	con = pymongo.Connection(conf.MONGO_HOST, conf.MONGO_PORT)
+	
+	auth_db = con[conf.MONGO_AUTH_DB]
+	try:
+		auth_db.authenticate(conf.MONGO_AUTH_USER, conf.MONGO_AUTH_PWD)
+		return auth_db
+	except:
+		return None

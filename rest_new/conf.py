@@ -12,6 +12,13 @@ MONGO_PWD = '605605'
 
 MONGO_COL = 'commodity'
 
+#mongo auth db & collection
+MONGO_AUTH_DB = 'e_bus_account'
+MONGO_AUTH_USER = 'root'
+MONGO_AUTH_PWD = '605605'
+
+MONGO_AUTH_COL = 'ws_token'
+
 #api conf
 ITEM_PERPAGE = 20
 

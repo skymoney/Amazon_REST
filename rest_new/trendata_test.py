@@ -18,9 +18,23 @@ for data in final_data:
 #brand_info = brand_seller_api.brand_info('lilu')
 
 #print brand_info
+'''
 seller_info = brand_seller_api.seller_mobile_field('wig')
 
 hot_seller = sorted(seller_info, key=lambda x:x['count'], reverse=True)[:10]
 
 for s in hot_seller:
     print s
+'''
+from hashlib import md5
+import mongo_util
+import settings
+
+username = 'admin'
+password = 'admin'
+
+db = mongo_util.get_auth_db()
+
+db['ws_token'].insert({'username': username, 
+                       'password': md5(password).hexdigest(), 
+                       'token': ''})

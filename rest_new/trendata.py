@@ -7,7 +7,7 @@ from flask.ext.httpauth import HTTPBasicAuth
 
 from datetime import datetime
 
-import mongo_util, conf, brand_seller_api
+import mongo_util, conf, brand_seller_api, auth_util
 
 app = Flask(__name__)
 
@@ -18,11 +18,18 @@ def get_app():
 
 app = get_app()
 
-def check_pwd(username):
-	return None
+'''
+HTTP REST Auth
+'''
+auth = HTTPBasicAuth()
+
+@auth.verify_password
+def check_auth(username, password):
+	return auth_util.check_auth(username, password)
 
 
 @app.route('/', methods=['GET'])
+@auth.login_required
 def index():
 	ret_val = {'status': 'ok', 
 		'data': 'Trendata API', 
@@ -244,5 +251,5 @@ def bad_request(error):
 
 #main entrance
 if __name__ == '__main__':
-	app.debug = False
+	app.debug = True
 	app.run(host='0.0.0.0',port=8019)
