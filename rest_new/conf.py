@@ -19,6 +19,10 @@ MONGO_AUTH_PWD = '605605'
 
 MONGO_AUTH_COL = 'ws_token'
 
+#redis conf
+REDIS_HOST = ''
+REDIS_PORT = ''
+
 #api conf
 ITEM_PERPAGE = 20
 

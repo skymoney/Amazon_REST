@@ -8,6 +8,7 @@ from flask.ext.httpauth import HTTPBasicAuth
 from datetime import datetime
 
 import mongo_util, conf, brand_seller_api, auth_util
+from access_limit import ratelimit, get_view_rate_limit
 
 app = Flask(__name__)
 
@@ -28,8 +29,20 @@ def check_auth(username, password):
 	return auth_util.check_auth(username, password)
 
 
+@app.after_request
+def add_x_rate_header(response):
+	limit = get_view_rate_limit()
+	if limit and limit.send_x_headers:
+		h = response.headers
+		h.add('X-Rate-Remaining', str(limit.remaining))
+		h.add('X-Rate-Limit', str(limit.limit))
+		h.add('X-Rate-Reset', str(limit.reset))
+	return response
+
+
 @app.route('/', methods=['GET'])
 @auth.login_required
+#@ratelimit(limit=10, per=60)
 def index():
 	ret_val = {'status': 'ok', 
 		'data': 'Trendata API', 
