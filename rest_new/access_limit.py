@@ -30,7 +30,7 @@ def get_view_rate_limit():
     return getattr(g, '_view_rate_limit', None)
 
 def on_over_limit(limit):
-    return jsonify({'status': 'error', 'data': 'access limit'}), 400
+    return jsonify({'status': 'error', 'data': 'access limit'}), 200
 
 def ratelimit(limit, per=300, send_x_headers=True, 
     over_limit=on_over_limit, 
