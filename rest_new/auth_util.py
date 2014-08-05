@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
 
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous import JSONWebSignatureSerializer as Serializer
 from hashlib import md5
 import mongo_util
 import settings, conf
