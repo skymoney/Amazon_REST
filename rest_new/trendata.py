@@ -42,7 +42,7 @@ def add_x_rate_header(response):
 
 @app.route('/', methods=['GET'])
 @auth.login_required
-#@ratelimit(limit=10, per=60)
+@ratelimit(limit=100, per=60)
 def index():
 	ret_val = {'status': 'ok', 
 		'data': 'Trendata API', 
