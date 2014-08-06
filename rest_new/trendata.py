@@ -51,6 +51,7 @@ def index():
 
 @app.route('/category/all', methods=['GET'])
 @auth.login_required
+@ratelimit(limit=100, per=60)
 def all_categories():
 	'''fetch all categories'''
 	db = mongo_util.get_mongo_db()
@@ -62,6 +63,7 @@ def all_categories():
 
 @app.route('/category/count/<category>', methods=['GET'])
 @auth.login_required
+@ratelimit(limit=100, per=60)
 def category_commodity(category):
 	'''fetch commodity info given category name'''
 	db = mongo_util.get_mongo_db()
@@ -75,6 +77,7 @@ def category_commodity(category):
 
 @app.route('/category/<category>', methods= ['GET'])
 @auth.login_required
+@ratelimit(limit=100, per=60)
 def category_commodity_info(category):
 	'''fetch commodity info given category name'''
 	db = mongo_util.get_mongo_db()
@@ -129,6 +132,7 @@ def multi_category_fetch(field):
 	
 @app.route('/fields/', methods=['GET'])
 @auth.login_required
+@ratelimit(limit=100, per=60)
 def field_available():
 	'''get all available fields'''
 	return jsonify({'status': 'ok', 
@@ -136,6 +140,7 @@ def field_available():
 
 @app.route('/commodity/<asin>/', methods=['GET'])
 @auth.login_required
+@ratelimit(limit=100, per=60)
 def single_commodity(asin):
 	'''get single commodity info'''
 	db =  mongo_util.get_mongo_db()
@@ -177,6 +182,7 @@ def seller_info(seller_name):
 
 @app.route('/custom/', methods=['GET'])
 @auth.login_required
+@ratelimit(limit=100, per=60)
 def custom_query():
 	'''custom query for data'''
 	if "query" in request.args or "ret" in request.args:
@@ -270,5 +276,5 @@ def bad_request(error):
 
 #main entrance
 if __name__ == '__main__':
-	app.debug = False
+	app.debug = True
 	app.run(host='0.0.0.0',port=8019)
