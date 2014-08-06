@@ -50,6 +50,7 @@ def index():
 	return jsonify(ret_val)
 
 @app.route('/category/all', methods=['GET'])
+@auth.login_required
 def all_categories():
 	'''fetch all categories'''
 	db = mongo_util.get_mongo_db()
@@ -60,6 +61,7 @@ def all_categories():
 	return jsonify({'status': 'ok', 'data': all_cate_info})
 
 @app.route('/category/count/<category>', methods=['GET'])
+@auth.login_required
 def category_commodity(category):
 	'''fetch commodity info given category name'''
 	db = mongo_util.get_mongo_db()
@@ -72,6 +74,7 @@ def category_commodity(category):
 		'count': category_cursor.count()}})
 
 @app.route('/category/<category>', methods= ['GET'])
+@auth.login_required
 def category_commodity_info(category):
 	'''fetch commodity info given category name'''
 	db = mongo_util.get_mongo_db()
@@ -125,12 +128,14 @@ def multi_category_fetch(field):
 				'data': top_n_commodity})
 	
 @app.route('/fields/', methods=['GET'])
+@auth.login_required
 def field_available():
 	'''get all available fields'''
 	return jsonify({'status': 'ok', 
 		'data': ['ASIN', 'offer', 'review', 'seller', 'productInfo']})
 
 @app.route('/commodity/<asin>/', methods=['GET'])
+@auth.login_required
 def single_commodity(asin):
 	'''get single commodity info'''
 	db =  mongo_util.get_mongo_db()
@@ -171,6 +176,7 @@ def seller_info(seller_name):
 #############custom query##########################
 
 @app.route('/custom/', methods=['GET'])
+@auth.login_required
 def custom_query():
 	'''custom query for data'''
 	if "query" in request.args or "ret" in request.args:
