@@ -9,23 +9,24 @@
 #########################
 
 import urllib2, base64
-import requests
+import requests  #you can also use requests
 
 url = 'http://112.124.1.3:8020'
-url = 'http://localhost:8019'
 
 username = ''
 password = ''
 
 token = ''
-for i in xrange(110):
-    request = urllib2.Request(url)
-     
-    base64String = base64.encodestring('%s:%s'%(token, '')).replace('\n', '')
+
+request = urllib2.Request(url)
+
+#Use token here, username&password can also be used     
+base64String = base64.encodestring('%s:%s'%(token, '')).replace('\n', '')
         
-    request.add_header('Authorization', 'Basic %s'%(base64String))
-    try:
-        response = urllib2.urlopen(request)
-        print response.code
-    except:
-        print 'error: ', urllib2.urlopen(request).code
+request.add_header('Authorization', 'Basic %s'%(base64String))
+try:
+    response = urllib2.urlopen(request)
+    print response.code  #usually 200
+    print response.read()   #response content
+except:
+    print 'error'
