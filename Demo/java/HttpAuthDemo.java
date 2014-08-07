@@ -15,8 +15,8 @@ public class HttpAuthDemo {
 	}
 	
 	public static void fetch_data() throws IOException{
-		String username = "mg1332011@software.nju.edu.cn";
-		String passwd = "123456";
+		String username = "";
+		String passwd = "";
 		String token = "";
 		BufferedReader reader = null;
 		String result = "";
