@@ -209,6 +209,7 @@ def custom_query():
 
 #########img dispatcher###################
 ROOT_DIR = '/mnt/mongo/ImageData/'
+MOBILE_ROOT_DIR = '/mnt/mongo/ImageData/mobilefield/'
 
 ACCESS_DIR = 'http://112.124.1.3/ImageData/'
 
@@ -252,6 +253,26 @@ def dispatch_by_asin(asin):
 		return jsonify({'status': 'ok', 'data': {'img': asin_url, 'charts': all_access_imgs}})
 	
 	return jsonify({'status': 'error', 'data': 'target data not exists'})
+
+@app.route('/img/<field>/<type>/<name_or_asin>/<img_type>', methods=['GET'])
+def mobile_img_dispatcher(field, type, name_or_asin, img_type):
+	'''
+	get mobile image
+	by field, type and other info
+	default return the latest
+	'''
+	try:
+		all_files = os.listdir(MOBILE_ROOT_DIR \
+							+ '/'.join([field, type, name_or_asin]))
+		all_result = ['test']
+		for single_file in all_files:
+			if re.search(r'' + img_type, single_file):
+				all_result.append(single_file)
+		
+		return ACCESS_DIR+ 'mobilefield/' + '/'.join([field, type, name_or_asin]) + '/' \
+			+ sorted(all_result, key=lambda x: x, reverse=True)[0]
+	except:
+		return ""
 
 #########error handler####################
 @app.errorhandler(404)
