@@ -264,7 +264,7 @@ def mobile_img_dispatcher(field, type, name_or_asin, img_type):
 	try:
 		all_files = os.listdir(MOBILE_ROOT_DIR \
 							+ '/'.join([field, type, name_or_asin]))
-		all_result = ['test']
+		all_result = []
 		for single_file in all_files:
 			if re.search(r'' + img_type, single_file):
 				all_result.append(single_file)
