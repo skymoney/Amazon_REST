@@ -29,9 +29,13 @@ class Trendata:
         
         return s.text if s.ok else None
         
-username = 'mg1332011@software.nju.edu.cn'
-passwd = '123456'
-t = Trendata(username=username, passwd=passwd)
+username = ''  #here place your username and passwd
+passwd = ''
+
+#or just put token here
+token = ''
+
+t = Trendata(username=username, passwd=passwd, token=token)
 
 def get_entrance():
     '''
