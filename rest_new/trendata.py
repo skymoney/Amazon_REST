@@ -43,6 +43,9 @@ def add_x_rate_header(response):
 		h.add('X-Rate-Reset', str(limit.reset))
 	return response
 
+####make custom cache key####
+def make_cache_key(*agrs, **kwargs):
+	return request.url.encode('utf-8')
 
 @app.route('/', methods=['GET'])
 @auth.login_required
@@ -57,7 +60,7 @@ def index():
 @app.route('/category/all', methods=['GET'])
 @auth.login_required
 @ratelimit(limit=100, per=60)
-@cache.cached(timeout=300)
+@cache.cached(timeout=300, key_prefix=make_cache_key)
 def all_categories():
 	'''fetch all categories'''
 	db = mongo_util.get_mongo_db()
@@ -70,7 +73,7 @@ def all_categories():
 @app.route('/category/count/<category>', methods=['GET'])
 @auth.login_required
 @ratelimit(limit=100, per=60)
-@cache.cached(timeout=300)
+@cache.cached(timeout=300, key_prefix=make_cache_key)
 def category_commodity(category):
 	'''fetch commodity info given category name'''
 	db = mongo_util.get_mongo_db()
@@ -85,7 +88,7 @@ def category_commodity(category):
 @app.route('/category/<category>', methods= ['GET'])
 @auth.login_required
 @ratelimit(limit=100, per=60)
-@cache.cached(timeout=300)
+@cache.cached(timeout=300, key_prefix=make_cache_key)
 def category_commodity_info(category):
 	'''fetch commodity info given category name'''
 	db = mongo_util.get_mongo_db()
@@ -108,7 +111,7 @@ def category_commodity_info(category):
 			'data': map(lambda x: x, current_data_cursor)})
 
 @app.route('/mobilefield/<field>', methods=['GET'])
-@cache.cached(timeout=300)
+@cache.cached(timeout=300, key_prefix=make_cache_key)
 def multi_category_fetch(field):
 	#get category by field
 	#field means some categories combined
@@ -142,7 +145,7 @@ def multi_category_fetch(field):
 @app.route('/fields/', methods=['GET'])
 @auth.login_required
 @ratelimit(limit=100, per=60)
-@cache.cached(timeout=300)
+@cache.cached(timeout=300, key_prefix=make_cache_key)
 def field_available():
 	'''get all available fields'''
 	return jsonify({'status': 'ok', 
@@ -151,7 +154,7 @@ def field_available():
 @app.route('/commodity/<asin>/', methods=['GET'])
 @auth.login_required
 @ratelimit(limit=100, per=60)
-@cache.cached(timeout=300)
+@cache.cached(timeout=300, key_prefix=make_cache_key)
 def single_commodity(asin):
 	'''get single commodity info'''
 	db =  mongo_util.get_mongo_db()
@@ -168,19 +171,19 @@ def single_commodity(asin):
 #############seller and brand#########################
 
 @app.route('/mobilefield/brand/<field>', methods=['GET'])
-@cache.cached(timeout=300)
+@cache.cached(timeout=300, key_prefix=make_cache_key)
 def brand_mobile_field(field):
 	return jsonify({'status': 'ok', 
 				'data': brand_seller_api.brand_mobile_field(field) })
 
 @app.route('/mobilefield/brand/info/<brand_name>', methods=['GET'])
-@cache.cached(timeout=300)
+@cache.cached(timeout=300, key_prefix=make_cache_key)
 def brand_info(brand_name):
 	return jsonify({'status': 'ok', 
 				'data': brand_seller_api.brand_info(brand_name) })
 
 @app.route('/mobilefield/seller/<field>', methods=['GET'])
-@cache.cached(timeout=300)
+@cache.cached(timeout=300, key_prefix=make_cache_key)
 def seller_mobile_field(field):
 	return jsonify({'data': 'ok', 
 				'data': sorted(brand_seller_api.seller_mobile_field(field), 
@@ -188,7 +191,7 @@ def seller_mobile_field(field):
 								int(request.args.get('topn', '5'))]})
 
 @app.route('/mobilefield/seller/info/<seller_name>', methods=['GET'])
-@cache.cached(timeout=300)
+@cache.cached(timeout=300, key_prefix=make_cache_key)
 def seller_info(seller_name):
 	return jsonify({'data': 'ok', 
 				'data': brand_seller_api.seller_info(seller_name)})
