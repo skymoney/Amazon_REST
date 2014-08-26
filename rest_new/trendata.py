@@ -273,6 +273,7 @@ def dispatch_by_asin(asin):
 	return jsonify({'status': 'error', 'data': 'target data not exists'})
 
 @app.route('/img/<field>/<type>/<name_or_asin>/<img_type>', methods=['GET'])
+@app.route('/img/<field>/<type>/<img_type>', defaults={'name_or_asin': None})
 def mobile_img_dispatcher(field, type, name_or_asin, img_type):
 	'''
 	get mobile image
@@ -281,13 +282,14 @@ def mobile_img_dispatcher(field, type, name_or_asin, img_type):
 	'''
 	try:
 		all_files = os.listdir(MOBILE_ROOT_DIR \
-							+ '/'.join([field, type, name_or_asin]))
+							+ '/'.join(filter(lambda x: x is not None, [field, type, name_or_asin])))
 		all_result = []
 		for single_file in all_files:
 			if re.search(r'' + img_type, single_file):
 				all_result.append(single_file)
 		
-		return ACCESS_DIR+ 'mobilefield/' + '/'.join([field, type, name_or_asin]) + '/' \
+		return ACCESS_DIR+ 'mobilefield/' + '/'.join(filter(lambda x: x is not None, 
+											[field, type, name_or_asin])) + '/' \
 			+ sorted(all_result, key=lambda x: x, reverse=True)[0]
 	except:
 		return ""
