@@ -100,8 +100,8 @@ def seller_mobile_field(field, **kwargs):
                                  'seller_info': {
                                                  'count': x[1]['count'], 
                                                  'keywords': ['great', 'good', 'bad'], 
-                                                 'img': '', 
-                                                 'link': ''}}, 
+                                                 'img': x[1].get('img', ''), 
+                                                 'link': x[1].get('link', '')}}, 
                       seller_set.items()))
 
 def seller_info(seller_name):
