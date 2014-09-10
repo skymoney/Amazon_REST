@@ -73,23 +73,35 @@ def seller_mobile_field(field, **kwargs):
                             if single_seller['name'] != 'Null':
                                 seller_set[md5(single_seller['link']).digest()]['name']= \
                                     single_seller['name']
+                                
+                                seller_set[md5(single_seller['link']).digest()]['link'] = \
+                                    single_seller.get('link', '')
+                                seller_set[md5(single_seller['link']).digest()]['img'] = \
+                                    single_seller.get('img', '')
+                                
                         elif single_seller.has_key('link'):
                             #has no key
                             seller_set[md5(single_seller['link']).digest()]={'count': 1, 
-                                'name': single_seller['name']}                            
+                                'name': single_seller['name'], 
+                                'link': single_seller.get('link', ''), 
+                                'img': single_seller.get('img', '')}                            
                         elif single_seller['name'] == 'Amazon' and seller_set.has_key(md5('http://www.amazon.com').digest()):
                             #Amazon Self
                             seller_set[md5('http://www.amazon.com').digest()]['count'] += 1                            
                         else:
                             seller_set[md5('http://www.amazon.com').digest()]={'count': 1, 
-                                'name': 'Amazon'}
+                                'name': 'Amazon', 
+                                'link': 'http://www.amazon.com', 
+                                'img': ''}
                     except:
                         pass
     return filter(lambda x: x['name'] != 'Amazon' and x['name'] is not None, 
                   map(lambda x: {'name': x[1].get('name', ''), 
                                  'seller_info': {
                                                  'count': x[1]['count'], 
-                                                 'keywords': ['great', 'good', 'bad']}}, 
+                                                 'keywords': ['great', 'good', 'bad'], 
+                                                 'img': '', 
+                                                 'link': ''}}, 
                       seller_set.items()))
 
 def seller_info(seller_name):
