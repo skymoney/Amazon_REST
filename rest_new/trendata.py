@@ -174,7 +174,8 @@ def single_commodity(asin):
 @cache.cached(timeout=300, key_prefix=make_cache_key)
 def brand_mobile_field(field):
 	return jsonify({'status': 'ok', 
-				'data': brand_seller_api.brand_mobile_field(field) })
+				'data': brand_seller_api.brand_mobile_field(field)[0: \
+								int(request.args.get('topn', '5'))] })
 
 @app.route('/mobilefield/brand/info/<brand_name>', methods=['GET'])
 @cache.cached(timeout=300, key_prefix=make_cache_key)

@@ -55,7 +55,7 @@ def brand_mobile_field(field, **kwargs):
                                                        'keywords': ['good', 'great', 'bad']}}, 
                             sorted(brand_set.items(), \
                             key=lambda x: x[1]['review_count'], 
-                            reverse=True)[:5])
+                            reverse=True))
 
 
 def brand_info(brand_name):
