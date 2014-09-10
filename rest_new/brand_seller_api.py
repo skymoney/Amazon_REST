@@ -9,13 +9,13 @@ def get_keywords_info(seller, type='seller'):
         target_col = 'seller_keywords'
     if type == 'brand':
         target_col = 'brand_keywords'
-    seller_cur = db[type].find({'name': seller}, {target_col: 1})
+    seller_cur = map(lambda x:x, db[type].find({'name': seller}, {target_col: 1}))
     if seller_cur:
         return map(lambda x: x['word'], 
-                   map(lambda x: x, seller_cur)[0].get(target_col, 
-                                                       [{'word': 'good'}, 
-                                                        {'word': 'great'}, 
-                                                        {'word': 'bad'}]))[:3]
+                   seller_cur[0].get(target_col, 
+                                        [{'word': 'good'}, 
+                                         {'word': 'great'}, 
+                                         {'word': 'bad'}]))[:3]
     return ['good', 'great', 'bad']
     
 def brand_mobile_field(field, **kwargs):
