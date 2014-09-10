@@ -3,6 +3,21 @@
 from hashlib import md5
 import conf, mongo_util
 
+def get_keywords_info(seller, type='seller'):
+    db = mongo_util.get_mongo_db()
+    if type == 'seller':
+        target_col = 'seller_keywords'
+    if type == 'brand':
+        target_col = 'brand_keywords'
+    seller_cur = db[type].find({'name': seller}, {target_col: 1})
+    if seller_cur:
+        return map(lambda x: x['word'], 
+                   map(lambda x: x, seller_cur)[0].get(target_col, 
+                                                       [{'word': 'good'}, 
+                                                        {'word': 'great'}, 
+                                                        {'word': 'bad'}]))[:3]
+    return ['good', 'great', 'bad']
+    
 def brand_mobile_field(field, **kwargs):
     target_category_set = conf.CATEGORY_DICT.get(field, ['Pet Supplies>Dogs'])
     
@@ -95,11 +110,12 @@ def seller_mobile_field(field, **kwargs):
                                 'img': ''}
                     except:
                         pass
+    
     return filter(lambda x: x['name'] != 'Amazon' and x['name'] is not None, 
                   map(lambda x: {'name': x[1].get('name', ''), 
                                  'seller_info': {
                                                  'count': x[1]['count'], 
-                                                 'keywords': ['great', 'good', 'bad'], 
+                                                 'keywords': get_keywords_info(x[1]['name'], type='seller'), 
                                                  'img': x[1].get('img', ''), 
                                                  'link': x[1].get('link', '')}}, 
                       seller_set.items()))
