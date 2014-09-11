@@ -10,6 +10,7 @@ def get_keywords_info(seller, type='seller'):
     if type == 'brand':
         target_col = 'brand_keywords'
     seller_cur = map(lambda x:x, db[type].find({'name': seller}, {target_col: 1}))
+    
     if seller_cur:
         return map(lambda x: x['word'], 
                    seller_cur[0].get(target_col, 
@@ -52,7 +53,7 @@ def brand_mobile_field(field, **kwargs):
                 
     return map(lambda x: {'name': x[0], 'brand_info': {'count': x[1]['count'], 
                                                        'review_count': x[1]['review_count'],
-                                                       'keywords': ['good', 'great', 'bad']}}, 
+                                                       'keywords': get_keywords_info(x[0], type='brand')}}, 
                             sorted(brand_set.items(), \
                             key=lambda x: x[1]['review_count'], 
                             reverse=True))
@@ -125,5 +126,8 @@ def seller_info(seller_name):
     seller_info = map(lambda x:x ,db['seller'].find({'name': seller_name}, {'_id': 0}))
     
     return seller_info[0] if seller_info else {}
+
+if __name__ == '__main__':
+    print get_keywords_info('Cool2dayINC', type='seller')
     
         
